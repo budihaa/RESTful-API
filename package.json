@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "eslint": "^4.13.1",
-    "eslint-config-google": "^0.9.1"
+    "eslint-config-google": "^0.9.1",
+    "prettier-eslint": "^8.6.2"
   }
 }
