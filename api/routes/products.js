@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+// middleware for auth user
+const checkAuth = require('./../middleware/checkAuth');
+
 // package for uplaod file
 const multer = require('multer');
 
@@ -70,7 +73,7 @@ router.get('/', (req, res, next) => {
 }); // end get routes
 
 // upload.single('nama_field') = cuman bisa upload 1 file
-router.post('/', upload.single('productImage'), (req, res, next) => {
+router.post('/', checkAuth, upload.single('productImage'), (req, res, next) => {
   // Create instances from model
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
@@ -83,7 +86,6 @@ router.post('/', upload.single('productImage'), (req, res, next) => {
   product
     .save()
     .then((result) => {
-      console.log(result);
       res.status(201).json({
         message: 'Created product successfully',
         createdProduct: {
@@ -133,7 +135,7 @@ router.get('/:productId', (req, res, next) => {
     });
 }); // end routes for individual product
 
-router.patch('/:productId', (req, res, next) => {
+router.patch('/:productId', checkAuth, (req, res, next) => {
   const id = req.params.productId;
 
   // Check if user dont want update all data
@@ -159,7 +161,7 @@ router.patch('/:productId', (req, res, next) => {
     });
 }); // end patch
 
-router.delete('/:productId', (req, res, next) => {
+router.delete('/:productId', checkAuth, (req, res, next) => {
   const id = req.params.productId;
   Product.remove({ _id: id })
     .exec()

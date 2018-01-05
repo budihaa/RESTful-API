@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+// middleware for auth user
+const checkAuth = require('./../middleware/checkAuth');
+
 // import model
 const Product = require('./../models/products');
 const Order = require('./../models/orders');
 
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
   Order.find()
     .select('_id product qty')
     .populate('product', 'name') // like join table, but only show product name
@@ -35,7 +38,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
   // Validasi apakah productId
   Product.findById(req.body.product)
     .then((productId) => {
@@ -73,7 +76,7 @@ router.post('/', (req, res, next) => {
 });
 
 // routes for individual order
-router.get('/:orderId', (req, res, next) => {
+router.get('/:orderId', checkAuth, (req, res, next) => {
   Order.findById(req.params.orderId)
     .select('_id product qty')
     .populate('product')
@@ -101,7 +104,7 @@ router.get('/:orderId', (req, res, next) => {
     });
 });
 
-router.delete('/:orderId', (req, res, next) => {
+router.delete('/:orderId', checkAuth, (req, res, next) => {
   Order.remove({ _id: req.params.orderId })
     .exec()
     .then((result) => {

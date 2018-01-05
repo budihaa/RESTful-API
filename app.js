@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 // Import routes files
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user');
 
 // Connect to mongoDB with mongoose
 mongoose.Promise = global.Promise;
@@ -49,6 +50,7 @@ app.use((req, res, next) => {
 // Set the routes
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/user', userRoutes);
 
 // Error handling
 // error 404
